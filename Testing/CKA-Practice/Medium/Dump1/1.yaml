@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web
+  labels:
+    ques: prob1
+  namespace: dump1
+spec:
+  volumes:
+    - name: nginxconfig
+      configMap:
+        name: nginx-config
+    - name: nginxtls
+      secret:
+        secretName: nginx-secret
+  containers:
+    - name: nginx
+      image: nginx:1.11.9-alpine
+      ports:
+        - containerPort: 80
+        - containerPort: 443
+      volumeMounts:
+        - name: nginxconfig
+          mountPath: "/etc/nginx/conf.d/"
+        - name: nginxtls
+          mountPath: "/etc/nginx/ssl"

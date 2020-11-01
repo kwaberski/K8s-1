@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: webservice
+  labels:
+    ques: prob2
+  namespace: dump1
+spec:
+  selector:
+    ques: prob1
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+    - name: https
+      port: 443
+      targetPort: 443

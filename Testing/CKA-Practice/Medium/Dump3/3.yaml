@@ -1,0 +1,33 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-bro1
+  namespace: dump3
+  labels:
+    group: brothers
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-bro2
+  namespace: dump3
+  labels:
+    group: brothers
+spec:
+  containers:
+  - name: memcached
+    image: memcached
+  affinity:
+    podAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchLabels:
+            group: brothers
+        topologyKey: "kubernetes.io/hostname"
+
+

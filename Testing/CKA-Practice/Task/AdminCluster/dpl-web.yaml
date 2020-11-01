@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: web
+  name: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: web
+    spec:
+      volumes:
+      - name: secrets
+        secret:
+          secretName: secret1
+      containers:
+      - image: nginx
+        name: nginx
+        volumeMounts:
+        - name: secrets
+          mountPath: /etc/my-secrets
+          readOnly: true
+        resources: {}
+status: {}

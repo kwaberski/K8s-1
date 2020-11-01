@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: monitor-ds1
+spec:
+  selector:
+    matchLabels:
+      app: monitor
+  template:
+    metadata:
+      labels:
+        app: monitor
+    spec:
+      nodeSelector:
+        node: worker
+      containers:
+      - name: monitor
+        image: busybox:1.30.1
+        command: ["/bin/sh"]
+        args: ["-c", "sleep 1000 && echo Sleep expired > /dev/termination-log"]

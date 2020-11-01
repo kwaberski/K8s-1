@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: dump1
+  labels:
+    ques: prob4
+  name: dpl-redis
+spec:
+  selector:
+    matchLabels:
+      app: redis
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      volumes:
+        - name: redisconfig
+          configMap:
+            name: redis-config
+      containers:
+        - name: redis
+          image: redis:6.0.6-alpine
+          ports:
+            - containerPort: 6379
+          command:
+            - redis-server
+            - "/redis-master/redis.conf"
+          resources:
+            limits:
+              cpu: "0.2"
+          volumeMounts:
+            - name: redisconfig
+              mountPath: /redis-master

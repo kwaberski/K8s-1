@@ -1,0 +1,89 @@
+apiVersion: v1
+items:
+- apiVersion: autoscaling/v2beta2
+  kind: HorizontalPodAutoscaler
+  metadata:
+    creationTimestamp: "2020-09-21T00:56:16Z"
+    managedFields:
+    - apiVersion: autoscaling/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:spec:
+          f:maxReplicas: {}
+          f:minReplicas: {}
+          f:scaleTargetRef:
+            f:apiVersion: {}
+            f:kind: {}
+            f:name: {}
+          f:targetCPUUtilizationPercentage: {}
+      manager: kubectl
+      operation: Update
+      time: "2020-09-21T00:56:16Z"
+    - apiVersion: autoscaling/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:autoscaling.alpha.kubernetes.io/conditions: {}
+            f:autoscaling.alpha.kubernetes.io/current-metrics: {}
+        f:status:
+          f:currentCPUUtilizationPercentage: {}
+          f:currentReplicas: {}
+          f:desiredReplicas: {}
+          f:lastScaleTime: {}
+      manager: kube-controller-manager
+      operation: Update
+      time: "2020-09-21T01:26:24Z"
+    name: php-apache
+    namespace: hpa
+    resourceVersion: "765897"
+    selfLink: /apis/autoscaling/v2beta2/namespaces/hpa/horizontalpodautoscalers/php-apache
+    uid: 551899ce-f483-4f46-ae6a-9646fb482e91
+  spec:
+    maxReplicas: 10
+    metrics:
+    - resource:
+        name: cpu
+        target:
+          averageUtilization: 50
+          type: Utilization
+      type: Resource
+    minReplicas: 1
+    scaleTargetRef:
+      apiVersion: apps/v1
+      kind: Deployment
+      name: php-apache
+  status:
+    conditions:
+    - lastTransitionTime: "2020-09-21T01:16:35Z"
+      message: recent recommendations were higher than current one, applying the highest
+        recent recommendation
+      reason: ScaleDownStabilized
+      status: "True"
+      type: AbleToScale
+    - lastTransitionTime: "2020-09-21T01:17:06Z"
+      message: the HPA was able to successfully calculate a replica count from cpu
+        resource utilization (percentage of request)
+      reason: ValidMetricFound
+      status: "True"
+      type: ScalingActive
+    - lastTransitionTime: "2020-09-21T01:22:36Z"
+      message: the desired count is within the acceptable range
+      reason: DesiredWithinRange
+      status: "False"
+      type: ScalingLimited
+    currentMetrics:
+    - resource:
+        current:
+          averageUtilization: 0
+          averageValue: 1m
+        name: cpu
+      type: Resource
+    currentReplicas: 5
+    desiredReplicas: 5
+    lastScaleTime: "2020-09-21T01:22:36Z"
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
