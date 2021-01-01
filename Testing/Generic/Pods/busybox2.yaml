@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test
+  labels:
+    app: test
+spec:
+  containers:
+  - name: test
+    image: busybox
+    env:
+    - name: MESSAGE
+      value: "to ja krzys"
+#    command: ["/bin/echo"]
+    args:
+    - /bin/sh
+    - -c
+    - echo $MESSAGE; sleep 1000;
