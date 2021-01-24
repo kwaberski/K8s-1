@@ -1,1 +1,8 @@
 config-local
+
+# dont push keys and kubeconfig files as they include keys as well
+*.key
+*.kubeconfig
+
+# dont push the encryoption-config.yaml as it includes a key used by ETCD for at rest encryption
+encryption-config.yaml

@@ -1,0 +1,8 @@
+kubectl config set-cluster my-kubernetes --server=https://${KUBERNETES_PUBLIC_ADDRESS}:6443 --certificate-authority=ca.crt --embed-certs=true --kubeconfig=admin.kubeconfig
+
+kubectl config set-credentials admin --client-certificate=admin.crt --client-key=admin.key --embed-certs=true --kubeconfig=admin.kubeconfig
+
+kubectl config set-context default --cluster=my-kubernetes --user=admin --kubeconfig=admin.kubeconfig
+
+kubectl config use-context default --kubeconfig=admin.kubeconfig
+

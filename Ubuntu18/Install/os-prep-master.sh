@@ -1,17 +1,20 @@
 #!/bin/bash
-read -p "Enter desired hostname: " host_name
-if [ "$host_name" == "" ]; then
-  echo "Host name can not be blank! Exiting!"
-  exit
-fi
-
-ip_addr=$(ifconfig enp0s3 | grep "inet " | awk '{print $2}')
+#read -p "Enter desired hostname: " host_name
+#if [ "$host_name" == "" ]; then
+#  echo "Host name can not be blank! Exiting!"
+#  exit
+#fi
+#
+#ip_addr=$(ifconfig enp0s3 | grep "inet " | awk '{print $2}')
 
 ### set hostname
-sudo hostnamectl set-hostname $host_name
-echo "10.0.0.20 masteru" >> /etc/hosts
-echo "10.0.0.21 node1u" >> /etc/hosts
-echo "10.0.0.22 node2u" >> /etc/hosts
+#sudo hostnamectl set-hostname $host_name
+echo "192.168.2.32 master1" >> /etc/hosts
+echo "192.168.2.33 master2" >> /etc/hosts
+echo "192.168.2.34 master3" >> /etc/hosts
+echo "192.168.2.40 worker1" >> /etc/hosts
+echo "192.168.2.41 worker2" >> /etc/hosts
+echo "192.168.2.42 worker3" >> /etc/hosts
 
 ### instal Docker
 sudo apt-get install docker.io -y

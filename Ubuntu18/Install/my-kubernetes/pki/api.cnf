@@ -1,0 +1,18 @@
+[ v3_api ]
+basicConstraints        = critical, CA:FALSE
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid:always, issuer:always
+keyUsage                = critical, nonRepudiation, digitalSignature, keyEncipherment
+extendedKeyUsage        = critical, serverAuth
+subjectAltName          = @alt_names
+[alt_names]
+DNS.1 = kubernetes
+DNS.2 = kubernetes.default
+DNS.3 = kubernetes.default.svc
+DNS.4 = kubernetes.default.svc.cluster.local
+IP.1 = 10.32.0.1
+IP.2 = 192.168.2.32
+IP.3 = 192.168.2.33
+IP.4 = 192.168.2.34
+IP.5 = 127.0.0.1
+IP.6 = 192.168.0.20
