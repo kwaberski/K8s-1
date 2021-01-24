@@ -3,11 +3,11 @@ terraform {
 }
 
 provider "esxi" {
-  esxi_hostname      = "vmh"
+  esxi_hostname      = var.esxi_hname
   esxi_hostport      = "22"
   esxi_hostssl       = "443"
-  esxi_username      = "root"
-  esxi_password      = "VMty6ry5"
+  esxi_username      = var.esxi_uname
+  esxi_password      = var.esxi_pwd
 }
 
 resource "esxi_guest" "vmtest" {
