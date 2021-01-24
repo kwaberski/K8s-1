@@ -4,6 +4,11 @@ config-local
 *.key
 *.kubeconfig
 
+# dont push terraform sensitive files
+*.tfstate
+*.tfstate.backup
+.terraform/
+
 # dont push the encryoption-config.yaml as it includes a key used by ETCD for at rest encryption
 **/encryption-config.yaml
 
