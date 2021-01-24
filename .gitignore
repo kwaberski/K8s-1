@@ -5,4 +5,7 @@ config-local
 *.kubeconfig
 
 # dont push the encryoption-config.yaml as it includes a key used by ETCD for at rest encryption
-Ubuntu18/Install/my-kubernetes/etcd/encryption-config.yaml
+**/encryption-config.yaml
+
+# dont push admin.conf as it also includes keys
+**/admin.conf
