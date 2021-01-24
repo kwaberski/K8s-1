@@ -8,6 +8,7 @@ terraform validate
 # 1. supplying terraform variables' value on command line when running plan
 # 2. using TF_VAR_<var_name> OS env vars and setting them tu rin with plan
 # 3. enter them manually when terraform plan asks for it
+# 4. use a password manager like 1Password, Lastpass or opens source pass
 terraform plan -out k8s_infra.tfplan -var "esxi_hname=<value>" -var "esxi_uname=<value>" -var "esxi_pwd=<value>"
 # or
 terraform plan -out k8s_infra.tfplan
@@ -21,3 +22,8 @@ TF_VAR_esxi_hname=<value> TF_VAR_esxi_uname=<value> TF_VAR_esxi_pwd=<value> terr
 
 ## IMPORTANT2: either way the tfplan file will include variable values no matter how I provide them
 ## that is why i must not upload the plan to git or encrypt it before uploading
+
+## PAY ATTENTIONS
+## - provider related secrets show in PLAN and not in STATE
+## = how about secrets defined in resources ??
+## - encrypt plan/state files (for me only I could use PGP for that and possible the SOPS tool)
