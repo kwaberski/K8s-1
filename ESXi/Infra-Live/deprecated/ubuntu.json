@@ -1,0 +1,42 @@
+{
+    "DiskProvisioning": "flat",
+    "IPAllocationPolicy": "dhcpPolicy",
+    "IPProtocol": "IPv4",
+    "PropertyMapping": [
+        {
+            "Key": "instance-id",
+            "Value": "id-ovf"
+        },
+        {
+            "Key": "hostname",
+            "Value": ""
+        },
+        {
+            "Key": "seedfrom",
+            "Value": ""
+        },
+        {
+            "Key": "public-keys",
+            "Value": ""
+        },
+        {
+            "Key": "user-data",
+            "Value": "I2Nsb3VkLWNvbmZpZwp1c2VyczoKICAtIGRlZmF1bHQKICAtIG5hbWU6IGtyenlzCiAgICBzc2gtYXV0aG9yaXplZC1rZXlzOgogICAgICAtIHNzaC1lZDI1NTE5IEFBQUFDM056YUMxbFpESTFOVEU1QUFBQUlMcTh6VFdrY0RJY2cvakN1aTk2QlV0RnJXamZHN0dtY040ODJucXUwWXNKIGt3YWJlcnNraUBndWFyZGFuZXQubmV0CiAgICBzdWRvOiBBTEw9KEFMTCkgTk9QQVNTV0Q6QUxMCiAgICBncm91cHM6IHN1ZG8KICAgIHNoZWxsOiAvYmluL2Jhc2gKZmluYWxfbWVzc2FnZTogIlRoZSBzeXN0ZW0gaXMgcHJlcHBlZCwgYWZ0ZXIgJFVQVElNRSBzZWNvbmRzIgpwb3dlcl9zdGF0ZToKICB0aW1lb3V0OiAzMAogIG1vZGU6IHBvd2Vyb2ZmCg=="
+        },
+        {
+            "Key": "password",
+            "Value": ""
+        }
+    ],
+    "NetworkMapping": [
+        {
+            "Name": "VM Network",
+            "Network": "CORP"
+        }
+    ],
+    "MarkAsTemplate": false,
+    "PowerOn": false,
+    "InjectOvfEnv": false,
+    "WaitForIP": false,
+    "Name": "U1804T"
+}

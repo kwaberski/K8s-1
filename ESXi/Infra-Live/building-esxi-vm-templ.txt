@@ -1,0 +1,21 @@
+### BUILD MY TENMPLATE
+1. Install basic OS from http://archive.ubuntu.com/ubuntu/dists/bionic-updates/main/installer-amd64/current/images/netboot/mini.iso
+2. Update and install packages
+sudo apt update && sudo apt upgrade
+sudo apt install ssh open-vm-tools cloud-init python3-pip curl -y
+3. Install the VMware Guestinfo datasource (https://github.com/vmware/cloud-init-vmware-guestinfo)
+sudo su
+curl -sSL https://raw.githubusercontent.com/vmware/cloud-init-vmware-guestinfo/master/install.sh | sudo sh -
+4. clear /etc/network/interfaces
+cp /dev/null > /etc/network/interfaces
+rmdir /etc/network/interfaces.d/
+5. shutdown
+shutdown now
+6. export the VM to OVA
+ovftool vi://192.168.254.10/U18MiniT ./U18MiniT
+
+
+# disable ssh password login
+#sudo sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/' sshd_config
+# if you want to disable consiole login for all users (non root)
+#sudo touch /etc/nologin

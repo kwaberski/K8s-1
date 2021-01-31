@@ -9,6 +9,7 @@ config-local
 *.tfstate.backup
 .terraform/
 *.tfplan
+*.ova
 
 # dont push the encryoption-config.yaml as it includes a key used by ETCD for at rest encryption
 **/encryption-config.yaml

@@ -1,0 +1,29 @@
+u18-tmpl.ova: is a VM I installed from ISO and then dumped it into OVA using ovftool
+
+
+1. Using tf provider
+  a. ovf source = my ova | standard ubuntu image OVA locally saved | standard ubuntu image pulled from the Internet
+  b. with or without metadata
+  c. always with userData
+  d. NIC type unset or set to vmxnet3
+
+  RESULT: In ALL cases new VM is deployed but no network
+
+  e. deployed as a vm clone
+  RESULT: process hangs at the begining and VM is never created
+
+  f. my OVA with userdata
+  RESULT: WORKS :)
+
+3. Using the webUI
+  a. using the generic Ubuntu OVA and changing options to change the name as well as add the SSH key
+  RESULT: deploys but no network
+
+  b. deployed from the webUI using the generic Ubuntu OVA without customizations
+  RESULT: deploys but no network
+
+  c. deployed my OVA that I created from an exisiting VM
+  RESULT: WORKS
+
+TO Check
+where cloud init stores logs and meta/user/vendor data and see what it looks like an VM deployed from ISO

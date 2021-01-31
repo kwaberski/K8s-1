@@ -1,0 +1,26 @@
+# useful commands
+# Get ESXi info
+govc about
+# Get instance IP address
+watch -n 10 govc vm.info vmtest
+# Power off a VM
+govc vm.power -off "${VM}"
+# Get OVA image metadata
+ovftool --hideEula u18-tmpl.ova
+
+#Get instance IP from esxi
+#ssh to esxi
+vim-cmd vmsvc/getallvms
+vim-cmd vmsvc/get.guest <vm_number> | grep ipAddress
+
+# MAINTENACE
+#Find out which VMs are running on ESXi host:
+esxcli vm process list
+
+#check if in maintenance mode
+vim-cmd /hostsvc/hostsummary | grep inMaintenanceMode
+
+put in MM
+esxcli system maintenanceMode set -e true
+To enter maintenance mode:
+vim-cmd /hostsvc/maintenance_mode_enter

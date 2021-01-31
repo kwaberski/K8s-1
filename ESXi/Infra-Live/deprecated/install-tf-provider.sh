@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# IF YOU USE TERRAFORM .13 YOU DONT NEED TO INSTALL IT
+# THE PROVIDER WILL BE PULLED AUTOMATICALLY
 ### Steps to install ESXi terraform provider
 # https://github.com/josenk/terraform-provider-esxi
 sudo apt-get install golang
@@ -19,3 +21,6 @@ sudo cp terraform-provider-esxi_`cat version` /usr/local/bin
 # download terraform_0.12.30_linux_amd64.zip from https://www.terraform.io/downloads.html
 unzip ~/terraform_0.12.30_linux_amd64.zip
 sudo cp terraform /usr/local/bin
+
+# download OVFTOOL from VMWare and install
+sudo /bin/sh ./VMware-ovftool-4.4.1-16812187-lin.x86_64.bundle
