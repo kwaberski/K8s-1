@@ -6,9 +6,42 @@ sudo apt install ssh open-vm-tools cloud-init python3-pip curl -y
 3. Install the VMware Guestinfo datasource (https://github.com/vmware/cloud-init-vmware-guestinfo)
 sudo su
 curl -sSL https://raw.githubusercontent.com/vmware/cloud-init-vmware-guestinfo/master/install.sh | sudo sh -
-4. clear /etc/network/interfaces
+4. clear network configation files /etc/network/interfaces
 cp /dev/null > /etc/network/interfaces
 rmdir /etc/network/interfaces.d/
+sudo rm /etc/netplan/*
+
+5 IMPORTANMT: DHCP
+DHCP servers assign IP addresses based on DHCP unique ID (DUID)
+Four types are identified in RFC 8415:
+Link-layer address plus time (DUID-LLT)
+Vendor-assigned unique ID based on enterprise number (DUID-EN)
+Link-layer address (DUID-LL)
+UUID-based DUID (DUID-UUID)
+
+Now with NETPLAN you have two renderers: networkd od networkmanager:
+systemd-networkd uses a different method to generate the DUID than dhclient.
+dhclient by default uses the link-layer address while
+systemd-networkd uses the contents of /etc/machine-id
+
+a. here is a link to how to chaneg machine-id https://unix.stackexchange.com/questions/402999/is-it-ok-to-change-etc-machine-id
+   the issue with this approach is that whatever I will put in the template
+   I should run this command for ex. in cloud-init userdata and i will have to poweroff
+   the VM before I can use it again and I will have to do terrafrom refresh
+
+b. I can use the following netplan config
+network:
+  version: 2
+  ethernets:
+    enp3s0:
+      dhcp4: yes
+      dhcp-identifier: mac
+
+c. I can use static IPs in my netplan config
+
+
+
+
 5. shutdown
 shutdown now
 6. export the VM to OVA
