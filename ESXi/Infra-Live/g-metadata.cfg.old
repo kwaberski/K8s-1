@@ -1,9 +1,0 @@
-instance-id: ${h_name}
-local-hostname: ${h_name}
-network:
-  version: 2
-  ethernets:
-    nics:
-      match:
-        name: ens*
-      dhcp4: yes

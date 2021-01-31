@@ -52,8 +52,17 @@ resource "esxi_guest" "masters" {
   "metadata.encoding" = "gzip+base64"
   "metadata"          = base64gzip( templatefile("g-metadata.cfg", { h_name = "${var.cluster_info["name"]}m${count.index +1}" } ) )
   "userdata.encoding" = "gzip+base64"
-  "userdata"          = base64gzip( templatefile("g-userdata.cfg", { h_name = "${var.cluster_info["name"]}m${count.index +1}" } ) )
+  "userdata"          = base64gzip( templatefile("g-userdata.cfg", { h_name = "${var.cluster_info["name"]}m${count.index +1}" , h_ip = cidrhost(local.m_cidr,count.index) , h_mask = var.n_mask , h_gw = var.gw } ) )
   }
+
+  provisioner "local-exec" {
+    command = "ssh nggw \"echo $h_ip $h_name | sudo tee -a /etc/hosts && sudo systemctl reload dnsmasq\" "
+    environment = {
+      h_ip = cidrhost(local.m_cidr,count.index)
+      h_name = "${var.cluster_info["name"]}m${count.index +1}"
+    }
+  }
+
 }
 
 resource "esxi_guest" "workers" {
@@ -80,6 +89,15 @@ resource "esxi_guest" "workers" {
   "metadata.encoding" = "gzip+base64"
   "metadata"          = base64gzip( templatefile("g-metadata.cfg", { h_name = "${var.cluster_info["name"]}w${count.index +1}" } ) )
   "userdata.encoding" = "gzip+base64"
-  "userdata"          = base64gzip( templatefile("g-userdata.cfg", { h_name = "${var.cluster_info["name"]}w${count.index +1}" } ) )
+  "userdata"          = base64gzip( templatefile("g-userdata.cfg", { h_name = "${var.cluster_info["name"]}w${count.index +1}" , h_ip = cidrhost(local.w_cidr,count.index) , h_mask = var.n_mask , h_gw = var.gw } ) )
   }
+
+  provisioner "local-exec" {
+    command = "ssh nggw \"echo $h_ip $h_name | sudo tee -a /etc/hosts && sudo systemctl reload dnsmasq\" "
+    environment = {
+      h_ip = cidrhost(local.w_cidr,count.index)
+      h_name = "${var.cluster_info["name"]}w${count.index +1}"
+    }
+  }
+
 }

@@ -31,18 +31,17 @@ variable "cluster_info" {
   default = {
     name = "c1"
     masters = 1
-    workers = 1
+    workers = 3
   }
 }
 
 ##################################################################################
 # LOCALS
 ##################################################################################
-
 locals {
-  m_cidr = cidrsubnet(var.cidr, 6, 6)
+  m_cidr = cidrsubnet(var.cidr, 6, 10)
 }
 
 locals {
-  w_cidr = cidrsubnet(var.cidr, 6, 7)
+  w_cidr = cidrsubnet(var.cidr, 6, 11)
 }

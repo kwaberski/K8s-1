@@ -6,6 +6,7 @@ network:
       addresses: [${h_ip}/${h_mask}]
       gateway4: ${h_gw}
       nameservers:
+        search: [corp.guardanet.net]
         addresses:
           - ${h_gw}
           - 8.8.8.8
