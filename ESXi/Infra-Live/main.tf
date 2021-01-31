@@ -32,7 +32,7 @@ resource "esxi_guest" "masters" {
   count = var.cluster_info["masters"]
   guest_name         = "${var.cluster_info["name"]}m${count.index +1}"
   disk_store         = "internal_hdd"
-  ovf_source = "U18MiniT-no-ci-net.ova"
+  ovf_source = "U18MiniT-np-duid-mac.ova"
   resource_pool_name = "/"
   power = "on" # if power off then no IP in the output
   memsize  = "2048"
@@ -60,14 +60,14 @@ resource "esxi_guest" "workers" {
   count = var.cluster_info["workers"]
   guest_name         = "${var.cluster_info["name"]}w${count.index +1}"
   disk_store         = "internal_hdd"
-  ovf_source = "U18MiniT-no-ci-net.ova"
+  ovf_source = "U18MiniT-np-duid-mac.ova"
   resource_pool_name = "/"
   power = "on" # if power off then no IP in the output
   memsize  = "4096"
   numvcpus = "2"
   virthwver = "13" # ESXi 6.5 and later https://docs.vmware.com/en/VMware-vSphere/6.7/com.vmware.vsphere.vm_admin.doc/GUID-789C3913-1053-4850-A0F0-E29C3D32B6DA.html
-  guest_startup_timeout = "45"
-  guest_shutdown_timeout = "30"
+  guest_startup_timeout = "20"
+  guest_shutdown_timeout = "5"
   network_interfaces {
     virtual_network = "CORP"
     nic_type        = "vmxnet3" # this is the interface type use by ESXi 6.5
