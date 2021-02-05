@@ -31,7 +31,7 @@ variable "cluster_info" {
   default = {
     name = "c1"
     masters = 1
-    workers = 1
+    workers = 3
   }
 }
 
