@@ -36,7 +36,7 @@ resource "esxi_guest" "masters" {
   resource_pool_name = "/"
   power = "on" # if power off then no IP in the output
   memsize  = "2048"
-  numvcpus = "1"
+  numvcpus = "2"
   virthwver = "13" # ESXi 6.5 and later https://docs.vmware.com/en/VMware-vSphere/6.7/com.vmware.vsphere.vm_admin.doc/GUID-789C3913-1053-4850-A0F0-E29C3D32B6DA.html
   guest_startup_timeout = "45"
   guest_shutdown_timeout = "30"
