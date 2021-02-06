@@ -10,8 +10,8 @@ terraform validate
 # 3. enter them manually when terraform plan asks for it
 # 4. use a password manager like 1Password, Lastpass or opens source pass
 terraform plan -out k8s_infra.tfplan -var "esxi_hname=<value>" -var "esxi_uname=<value>" -var "esxi_pwd=<value>"
-# or
-terraform plan -out k8s_infra.tfplan
+# or terraform plan -out k8s_infra.tfplan
+
 # and enter the values
 # or use OS env variables with the TF_VAR_ prefix
 TF_VAR_esxi_hname=<value> TF_VAR_esxi_uname=<value> TF_VAR_esxi_pwd=<value> terraform plan -out k8s_infra.tfplan
