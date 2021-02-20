@@ -101,7 +101,7 @@ EOF
 
 ### Configure the kubelet
 sudo mv ${HOSTNAME}.key ${HOSTNAME}.crt /var/lib/kubelet/
-sudo mv ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
+sudo mv ${HOSTNAME}.onfig /var/lib/kubelet/kubeconfig
 sudo mv ca.crt /var/lib/kubernetes/
 
 cat <<EOF | sudo tee /var/lib/kubelet/kubelet-config.yaml
