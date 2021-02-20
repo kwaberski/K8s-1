@@ -1,7 +1,7 @@
-#Kubernetes on Free ESXI
-##Branch : ci-machine-id
+# Kubernetes on Free ESXI
+## Branch : ci-machine-id
 
-###DHCP Related comment
+### DHCP Related comment
 DHCP servers assign IP addresses based on DHCP unique ID (DUID)
 NETPLAN has two renderers: networkd or networkmanager. systemd-networkd uses the contents of /etc/machine-id
 to create the OUID. As a result when you clone off an OVA image the clones will get the IP from DHCP
