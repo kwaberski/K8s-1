@@ -117,6 +117,10 @@ curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/
 curl -L https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$VERSION/$OS/Release.key | sudo apt-key --keyring /etc/apt/trusted.gpg.d/libcontainers-cri-o.gpg add -
 sudo apt-get update
 sudo apt-get install cri-o cri-o-runc -y
+cat <<EOF | sudo tee /etc/containers/registries.conf
+[registries.search]
+registries = ['docker.io', 'quay.io']
+EOF
 sudo systemctl daemon-reload
 sudo systemctl start crio
 
