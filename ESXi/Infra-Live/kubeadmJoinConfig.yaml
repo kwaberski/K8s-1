@@ -1,0 +1,27 @@
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: JoinConfiguration
+discovery:
+  bootstrapToken:
+    apiServerEndpoint: "c1:443"
+    token: "1h8obe.p47wlhuew5nsfv1c"
+    unsafeSkipCAVerification: true
+#    caCertHashes:
+#    - "sha256:98d3b1ba5e0961297284e761c3fe5d7c106f06b7aea04fc26568f08b3652af81"
+nodeRegistration:
+  criSocket: /var/run/crio/crio.sock
+---
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+controlPlaneEndpoint: "c1:443"
+apiServer:
+  certSANs:
+  - "192.168.0.20"
+  - "c1.corp.guardanet.net"
+networking:
+  dnsDomain: cluster.local
+  serviceSubnet: 10.96.0.0/12
+  podSubnet: 172.16.0.0/16
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+cgroupDriver: systemd

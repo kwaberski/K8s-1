@@ -45,6 +45,8 @@ sudo sysctl --system
 # diferent rules on masters and workers
 # I rely on naming convention that is c<digit>m<digit> for masters and c<digit>m<digit> for workers
 NODE=`hostname | cut -c 3`
+MID=`hostname | cut -c 4`
+
 
 if [ "$NODE" = "m" ];
 then
@@ -106,7 +108,7 @@ fi
 OS="xUbuntu_18.04"
 #VERSION="$S_VERSION"
 VERSION="1.20"
-L_VERSION="1.20.0-00"
+L_VERSION="1.20.1-00"
 cat <<EOF | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
 deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/ /
 EOF
@@ -117,11 +119,14 @@ curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/
 curl -L https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$VERSION/$OS/Release.key | sudo apt-key --keyring /etc/apt/trusted.gpg.d/libcontainers-cri-o.gpg add -
 sudo apt-get update
 sudo apt-get install cri-o cri-o-runc -y
-cat <<EOF | sudo tee /etc/containers/registries.conf
-[registries.search]
-registries = ['docker.io', 'quay.io']
-EOF
+# You must remove metacopy=on from mountopt in /etc/containers/storage.conf
+sudo sed -i 's/,metacopy=on//' /etc/containers/storage.conf
+#cat <<EOF | sudo tee /etc/containers/registries.conf
+#[registries.search]
+#registries = ['docker.io', 'quay.io']
+#EOF
 sudo systemctl daemon-reload
+sudo systemctl enable crio
 sudo systemctl start crio
 
 # Lets install desired versions of kubeadm, kubelet, kubectl
@@ -135,56 +140,44 @@ sudo apt-get update
 sudo apt-get install -y kubelet=$L_VERSION kubeadm=$L_VERSION kubectl=$L_VERSION
 sudo apt-mark hold kubelet kubeadm kubectl
 
+
+### IMPORTANT
+# if running a cluster with a frontend LB make sure you provision that LB as well
+# and if you do TLS healthcheck you need to either do verify none on the server line
+# not to verify the server's cert
+# or deliver the ca.crt file to the LB and point to it
+
 # Install the master
 ### initialize the MASTER
 if [ "$NODE" = "m" ];
 then
-# I'M MASTER
-
-# IMPORTANT
-# When using Docker, kubeadm will automatically detect the cgroup driver for the kubelet and set it in the /var/lib/kubelet/config.yaml file during runtime.
-# If you are using a different CRI, you must pass your cgroupDriver value to kubeadm init
-
-cat <<EOF | tee myConfiguration.yaml
-apiVersion: kubeadm.k8s.io/v1beta2
-kind: ClusterConfiguration
-networking:
-  dnsDomain: cluster.local
-  serviceSubnet: 10.96.0.0/12
-  podSubnet: 172.16.0.0/16
----
-apiVersion: kubelet.config.k8s.io/v1beta1
-kind: KubeletConfiguration
-cgroupDriver: systemd
-EOF
-
-# Init the MASTER
-sudo kubeadm init --config myConfiguration.yaml
-
-# copy kubeconfig file
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
-# Deploy a CNI based Pod network add-on so pods can communicate
-# Installing Calico: calico detects pod-cidr if setup with kubeadm
-kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
-
-#elif [ "$NODE" = "w" ];
-#then
-# I'M WORKER
-#  if [ "$HASH" = "" ] || [ "$TOKEN" = "" ] || [ "$MASTER" = "" ];
-#  then
-#  echo "You must set MASTER, TOKEN and HASH variables"
-#  exit 1
-#  else
-#  kubeadm join $MASTER:6443 --token $TOKEN --discovery-token-ca-cert-hash $sha256:$HASH
-#  fi
-
-# Here is how to generate a token and signature (digest) of the CA's public certificate
-# kubeadm token create
-# openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'
-# now join
-# kubeadm join $MASTER:6443 --token $TOKEN --discovery-token-ca-cert-hash sha256:$HASH
-
+  if [ $MID -eq 1 ];
+  then
+    # I'M the 1st MASTER
+    # IMPORTANT
+    # When using Docker, kubeadm will automatically detect the cgroup driver for the kubelet and set it in the /var/lib/kubelet/config.yaml file during runtime.
+    # If you are using a different CRI, you must pass your cgroupDriver value to kubeadm init
+    # Init the 1st MASTER
+    sudo kubeadm init --config kubeadmInitConfig.yaml
+    # Deploy a CNI based Pod network add-on so pods can communicate
+    # Installing Calico: calico detects pod-cidr if setup with kubeadm
+    sudo kubeadm init phase upload-certs --upload-certs --certificate-key a5bc630d641ad14c3699124a84368b0f33a5112b258b113fd636c957ba1face8
+    mkdir -p $HOME/.kube
+    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+    sudo chown $(id -u):$(id -g) $HOME/.kube/config
+    kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+    #
+    # here is a warning I get
+    # [endpoint] WARNING: port specified in controlPlaneEndpoint overrides bindPort in the controlplane address
+  else
+    sudo kubeadm join --config kubeadmJoinControlPlaneConfig.yaml
+    # copy kubeconfig file
+    mkdir -p $HOME/.kube
+    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+    sudo chown $(id -u):$(id -g) $HOME/.kube/config
+  fi
+elif [ "$NODE" = "w" ];
+then
+  # I'M WORKER
+  sudo kubeadm join --config kubeadmJoinConfig.yaml
 fi

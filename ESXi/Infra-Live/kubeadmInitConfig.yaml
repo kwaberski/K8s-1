@@ -1,0 +1,30 @@
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: InitConfiguration
+bootstrapTokens:
+- token: "1h8obe.p47wlhuew5nsfv1c"
+  groups:
+  - system:bootstrappers:kubeadm:default-node-token
+  ttl: 30m
+  usages:
+  - signing
+  - authentication
+nodeRegistration:
+  criSocket: /var/run/crio/crio.sock
+certificateKey: "a5bc630d641ad14c3699124a84368b0f33a5112b258b113fd636c957ba1face8"
+---
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+controlPlaneEndpoint: "c1:443"
+apiServer:
+  certSANs:
+  - "192.168.0.20"
+  - "c1.corp.guardanet.net"
+networking:
+  dnsDomain: cluster.local
+  serviceSubnet: 10.96.0.0/12
+  podSubnet: 172.16.0.0/16
+clusterName: "c1"
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+cgroupDriver: systemd

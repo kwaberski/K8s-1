@@ -30,7 +30,7 @@ variable "cluster_info" {
   type = map
   default = {
     name = "c1"
-    masters = 1
+    masters = 3
     workers = 3
   }
 }
