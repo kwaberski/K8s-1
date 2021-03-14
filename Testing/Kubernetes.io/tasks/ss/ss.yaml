@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ss-test
+spec:
+  selector:
+    matchLabels:
+      app: ss-app
+  serviceName: ss-app
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: ss-app
+    spec:
+      containers:
+      - name: ss-app-ctr
+        image: busybox
+        command:
+        - sh
+        - -c
+        - |
+          HN=`hostname`
+          echo "Node: $NODE | Hostname: $HN"
+          sleep 600
+        env:
+        - name: NODE
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+

@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-volroot
+spec:
+  volumeName: volroot
+  accessModes:
+  - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: pvc-hp-pod
+  name: pvc-hp-pod
+spec:
+  volumes:
+  - name: node-root
+    persistentVolumeClaim:
+      claimName: pvc-volroot
+  containers:
+  - image: busybox
+    name: pvc-hp-pod
+    command:
+    - /bin/sh
+    - -c
+    - |
+      echo "listing node's root fs"
+      ls /rootfs
+      sleep 100
+    volumeMounts:
+    - name: node-root
+      mountPath: /rootfs 
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}

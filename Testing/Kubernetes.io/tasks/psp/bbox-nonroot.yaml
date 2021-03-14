@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-bbox-noroot
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+  containers:
+  - image: busybox
+    name: busybox
+    command:
+    - /bin/sh
+    - -c
+    - sleep 1000

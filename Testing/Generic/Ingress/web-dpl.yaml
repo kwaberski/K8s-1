@@ -56,11 +56,14 @@ metadata:
     app: green
   name: green
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: green
-  strategy: {}
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 2 
   template:
     metadata:
       creationTimestamp: null
@@ -71,8 +74,10 @@ spec:
       - configMap:
           name: greenindex
         name: green-index
+      imagePullSecrets:
+      - name: regcred
       containers:
-      - image: nginx
+      - image: docker.io/kwaberski/test:3.0
         name: nginx
         ports:
         - containerPort: 80
@@ -80,6 +85,10 @@ spec:
         - name: green-index
           mountPath: /usr/share/nginx/html
           readOnly: true
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
         resources: {}
 ---
 apiVersion: apps/v1
@@ -94,7 +103,10 @@ spec:
   selector:
     matchLabels:
       app: red
-  strategy: {}
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 2 
   template:
     metadata:
       creationTimestamp: null
@@ -114,6 +126,10 @@ spec:
         - name: red-index
           mountPath: /usr/share/nginx/html
           readOnly: true
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
         resources: {}
 ---
 apiVersion: v1
@@ -149,7 +165,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: vhost-ingress
+  name: ingress-vhost
 spec:
   rules:
   - host: green.com

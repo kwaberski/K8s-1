@@ -1,0 +1,29 @@
+apiVersion: settings.k8s.io/v1beta
+kind: PodPreset
+metadata:
+  name: pod-preset
+spec:
+  volumes:
+  - name: cache
+    emptyDir: {}
+  - name: podinfo
+    downwardAPI:
+      items:
+      - path: "labels"
+        fieldRef:
+          fieldPath: metadata.labels
+      - path: "annotations"
+        fieldRef:
+          fieldPath: metadata.annotations
+  resources:
+    requests:
+      memory: "32Mi"
+      cpu: "125m"
+  volumeMounts:
+  - name: cache
+    mountPath: /var/cache
+  - name: podinfo
+    mountPath: /etc/podinfo
+  env:
+  - name: MEM
+  - value: "1024MB"

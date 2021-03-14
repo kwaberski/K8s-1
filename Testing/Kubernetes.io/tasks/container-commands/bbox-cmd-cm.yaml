@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bbox-cmd-cm
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+  volumes:
+  - name: my-sh
+    configMap:
+      name: my.sh
+      defaultMode: 0755
+  containers:
+  - image: busybox
+    name: busybox
+    volumeMounts:
+    - name: my-sh
+      mountPath: /bin/my.sh
+      readOnly: true
+    command:
+    - sh
+    - -c 
+    - |
+      /bin/my.sh
+      sleep 300

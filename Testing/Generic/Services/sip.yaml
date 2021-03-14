@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: sip
+  name: sip
+spec:
+  externalIPs:
+  - 192.168.2.121
+  - 192.168.2.100
+  - 192.168.2.67 
+  topologyKeys:
+  - "kubernetes.io/hostname"
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: sip
+  type: NodePort
+status:
+  loadBalancer: {}

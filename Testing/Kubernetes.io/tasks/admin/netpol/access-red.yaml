@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: access-nginx
+spec:
+  podSelector:
+    matchLabels:
+      app: red
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          ns: private
+      podSelector:
+        matchLabels:
+          accessRed: "true"
+    ports:
+    - port: 80
+      protocol: TCP

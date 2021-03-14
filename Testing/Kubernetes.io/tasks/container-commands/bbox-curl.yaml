@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bbox-curl
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+  containers:
+  - image: busybox
+    name: busybox
+    command:
+    - /bin/bash
+    - -c
+    - |
+      echo "Gathering my data"
+      {
+      read -rd '|' a
+      read -rd '|' b 
+      read -rd '|' c
+      } < <( curl -s -w "|%{http_code}" ipinfo.io; printf "|$?")
+      echo "RESP: $a"
+      echo "HTTP CODE: $b"
+      echo "SHELL CODE: $c"
+      sleep 100
