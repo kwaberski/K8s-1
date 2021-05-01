@@ -117,6 +117,10 @@ spec:
       - configMap:
           name: redindex
         name: red-index
+      initContainers:
+      - name: init-1
+        image: busybox
+        command: ['sh', '-c', "until nslookup red.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done"]
       containers:
       - image: nginx
         name: nginx
