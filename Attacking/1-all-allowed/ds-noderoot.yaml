@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ds-noderoot
+  name: ds-noderoot
+spec:
+  selector:
+    matchLabels:
+      app: ds-noderoot
+  template:
+    metadata:
+      labels:
+        app: ds-noderoot
+    spec:
+      tolerations:
+      - key: "node-role.kubernetes.io/master"
+        operator: Exists
+        effect: NoSchedule
+      hostNetwork: true
+      hostPID: true
+      hostIPC: true
+      containers:
+      - image: ubuntu
+        name: noderoot
+        command: ["/bin/sh", "-c", "--"]
+        args: ["while true; do sleep 30s; done;"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: noderoot
+          mountPath: /host
+      volumes:
+      - name: noderoot
+        hostPath:
+          path: / 

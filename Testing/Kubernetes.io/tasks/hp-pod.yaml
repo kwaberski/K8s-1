@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: hp-pod
+  name: hp-pod
+spec:
+  volumes:
+  - name: node-root
+    hostPath:
+      path: /
+  containers:
+  - image: ubuntu
+    name: hp-pod
+    securityContext:
+      privileged: true
+    command: ["bin/bash", "-c", "sleep 1d"]
+    volumeMounts:
+    - name: node-root
+      mountPath: /rootfs
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
