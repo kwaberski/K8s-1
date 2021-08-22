@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: mlt-ctr-pod
+  name: mlt-ctr-pod
+spec:
+  containers:
+  - image: busybox
+    name: first
+    command:
+    - /bin/sh
+    - -c
+    - while sleep 5; do echo "Hello from ctr1"; done
+  - image: busybox
+    name: second
+    command:
+    - /bin/sh
+    - -c
+    - while sleep 5; do echo "This is ctr2"; done

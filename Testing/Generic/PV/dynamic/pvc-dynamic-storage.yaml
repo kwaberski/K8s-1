@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-dynamic-storage
+  namespace: mysql
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "nfs-nas-storageclass"
+spec:
+  storageClassName: nfs-nas-storageclass # SAME NAME AS THE STORAGECLASS
+  accessModes:
+    - ReadWriteMany #  must be the same as PersistentVolume
+  resources:
+    requests:
+      storage: 256Mi
+

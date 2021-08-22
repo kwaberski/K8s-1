@@ -155,8 +155,10 @@ then
   then
     # I'M the 1st MASTER
     # IMPORTANT
-    # When using Docker, kubeadm will automatically detect the cgroup driver for the kubelet and set it in the /var/lib/kubelet/config.yaml file during runtime.
-    # If you are using a different CRI, you must pass your cgroupDriver value to kubeadm init
+    # When using Docker, kubeadm will automatically detect the cgroup driver for the kubelet 
+    # and set it in the /var/lib/kubelet/config.yaml file during runtime.
+    # If you are using a different CRI, you must pass your cgroupDriver value to kubeadm 
+    # init
     # Init the 1st MASTER
     sudo kubeadm init --config kubeadmInitConfig.yaml
     # Deploy a CNI based Pod network add-on so pods can communicate

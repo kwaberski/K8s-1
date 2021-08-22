@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: ephemeral
+  name: ephemeral
+spec:
+  containers:
+  - image: k8s.gcr.io/pause:3.1
+    name: ephemeral

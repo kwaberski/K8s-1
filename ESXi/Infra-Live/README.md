@@ -4,9 +4,9 @@
 ### DHCP Related comment
 DHCP servers assign IP addresses based on DHCP unique ID (DUID)
 NETPLAN has two renderers: networkd or networkmanager. systemd-networkd uses the contents of /etc/machine-id
-to create the OUID. As a result when you clone off an OVA image the clones will get the IP from DHCP
+to create the OUID. As a result when you clone off an OVA image the clones will get the same IP from DHCP
 because they present the same OUID. You can either change the machine-id of the cloned instance or change the
-netplan config. Beacuse the ESCi does not want to process metadata I change the netplan configuration in my OVA image
+netplan config. Beacuse the ESXi does not want to process metadata I change the netplan configuration in my OVA image
 `enp3s0:
   dhcp4: yes
   dhcp-identifier: mac`

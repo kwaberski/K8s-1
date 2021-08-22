@@ -1,0 +1,59 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: mysql
+  name: mysql-pvc
+spec:
+  accessModes:
+  - ReadWriteMany
+  volumeName: nfs-mysql
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: mysql
+  name: mysql
+spec:
+  selector:
+    app: mysql
+  ports:
+  - port: 3306  
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: mysql
+  labels:
+    app: mysql
+  name: mysql
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      serviceAccount: mysql
+      volumes:
+      - name: db-data
+        persistentVolumeClaim:
+          claimName: mysql-pvc
+      containers:
+      - image: mysql
+        name: mysql
+        ports:
+        - containerPort: 3306
+          name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: password
+        volumeMounts:
+        - name: db-data
+          mountPath: /var/lib/mysql

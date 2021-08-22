@@ -11,8 +11,8 @@ spec:
     env:
     - name: MESSAGE
       value: "to ja krzys"
-#    command: ["/bin/echo"]
+    command: ["/bin/sh", "-c"]
     args:
-    - /bin/sh
-    - -c
-    - echo $MESSAGE; sleep 1000;
+    - echo "Test with ->"; 
+      echo $MESSAGE;
+      sleep 1m;

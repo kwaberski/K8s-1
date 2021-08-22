@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: ephemeral-sns
+  name: ephemeral-sns
+spec:
+  shareProcessNamespace: true
+  containers:
+  - image: k8s.gcr.io/pause:3.1
+    name: ephemeral-sns

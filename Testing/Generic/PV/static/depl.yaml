@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: mysql
+  labels:
+    app: mysql
+  name: mysql
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      serviceAccount: mysql
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: mysql-pvc
+      containers:
+      - image: busybox
+        name: mysql
+        command: ["/bin/sh","-c"]
+        args:
+        - |
+          echo "Registered: "$(hostname) >> /data/test-static
+          while sleep 15; do echo $(hostname)":" && cat /data/test-static; done
+        volumeMounts:
+        - name: data
+          mountPath: /data

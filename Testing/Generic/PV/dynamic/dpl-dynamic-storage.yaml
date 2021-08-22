@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: mysql
+  labels:
+    app: dynamic-storage
+  name: dpl-dynamic-storage
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dynamic-storage
+  template:
+    metadata:
+      labels:
+        app: dynamic-storage
+    spec:
+      serviceAccount: mysql
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: pvc-dynamic-storage
+      containers:
+      - image: busybox
+        name: dynamic-storage-ctr
+        command: ["/bin/sh","-c"]
+        args:
+        - |
+          echo "Registered: "$(hostname) >> /data/test-dynamic-storage
+          while sleep 15; do echo $(hostname)":" && cat /data/test-dynamic-storage; done
+        volumeMounts:
+        - name: data
+          mountPath: /data

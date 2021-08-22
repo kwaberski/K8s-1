@@ -1,0 +1,49 @@
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: InitConfiguration
+bootstrapTokens:
+- token: "$TOKEN"
+  groups:
+  - system:bootstrappers:kubeadm:default-node-token
+  ttl: 30m
+  usages:
+  - signing
+  - authentication
+nodeRegistration:
+  criSocket: $CRI_SOCKET
+certificateKey: "$KEY_TO_ENCRYPT_CONTROLPLANECERTS"
+---
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+controlPlaneEndpoint: "$CLUSTER_NAME:443"
+apiServer:
+  certSANs:
+  - "$CLUSTER_IP"
+  - "$CLUSTER_NAME.corp.guardanet.net"
+  extraArgs:
+    enable-admission-plugins: NodeRestriction
+    feature-gates: "EphemeralContainers=true,RemoveSelfLink=false"
+controllerManager:
+  extraArgs:
+    feature-gates: "EphemeralContainers=true,RemoveSelfLink=false"
+scheduler:
+  extraArgs:
+    feature-gates: "EphemeralContainers=true,RemoveSelfLink=false"
+networking:
+  dnsDomain: $CLUSTER_NAME.local
+  serviceSubnet: $SVC_SUBNET
+  podSubnet: $POD_CIDR
+clusterName: "$CLUSTER_NAME"
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+cgroupDriver: systemd
+featureGates:
+  EphemeralContainers: true
+  RemoveSelfLink: false
+---
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+kind: KubeProxyConfiguration
+featureGates:
+  EphemeralContainers: true
+  RemoveSelfLink: false
+

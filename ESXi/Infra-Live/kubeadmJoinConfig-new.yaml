@@ -1,0 +1,32 @@
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: JoinConfiguration
+discovery:
+  bootstrapToken:
+    apiServerEndpoint: "$CLUSTER_NAME:443"
+    token: "$TOKEN"
+    unsafeSkipCAVerification: true
+#    caCertHashes:
+#    - "sha256:98d3b1ba5e0961297284e761c3fe5d7c106f06b7aea04fc26568f08b3652af81"
+nodeRegistration:
+  criSocket: $CRI_SOCKET
+---
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+controlPlaneEndpoint: "$CLUSTER_NAME:443"
+networking:
+  dnsDomain: $CLUSTER_NAME.local
+  serviceSubnet: $SVC_SUBNET
+  podSubnet: $POD_CIDR
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+cgroupDriver: systemd
+featureGates:
+  EphemeralContainers: true
+  RemoveSelfLink: false
+---
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+kind: KubeProxyConfiguration
+featureGates:
+  EphemeralContainers: true
+  RemoveSelfLink: false

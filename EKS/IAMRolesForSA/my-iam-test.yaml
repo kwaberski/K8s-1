@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::359466956633:role/eksctl-staging-eks-imasarole-S3RO
+  labels:
+    app.kubernetes.io/managed-by: cli
+  name: my-iam-test
+  namespace: default
+  

@@ -29,9 +29,9 @@ variable "n_mask" {
 variable "cluster_info" {
   type = map
   default = {
-    name = "c1"
-    masters = 3
-    workers = 3
+    name = "c2"
+    masters = 2
+    workers = 2
   }
 }
 
